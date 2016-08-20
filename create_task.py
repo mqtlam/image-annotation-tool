@@ -9,8 +9,7 @@ import json
 import shutil
 from glob import glob
 
-STATE_DATA_DIR = 'data'
-TASKS_JSON = os.path.join(STATE_DATA_DIR, 'tasks.json')
+from paths import Paths
 
 def create_task_directory(args):
     """Helper to create task directory.
@@ -21,7 +20,7 @@ def create_task_directory(args):
     Args:
         args: command line args
     """
-    task_dir = os.path.join('data', args.id)
+    task_dir = Paths.task_dir(args.id)
     if not os.path.exists(task_dir):
         os.makedirs(task_dir)
 
@@ -37,14 +36,14 @@ def create_symlinks(args):
     Args:
         args: command line args
     """
-    public_images_dir = os.path.join('public', 'images')
+    public_images_dir = Paths.public_images_dir
     if not os.path.exists(public_images_dir):
         os.makedirs(public_images_dir)
 
-    data_symlink_file = os.path.join('data', args.id, 'images')
+    data_symlink_file = Paths.images_dir(args.id)
     os.symlink(args.images_dir, data_symlink_file)
 
-    public_symlink_file = os.path.join('', public_images_dir, args.id)
+    public_symlink_file = Paths.public_task_images_dir(args.id)
     os.symlink(os.path.join('../../', data_symlink_file), public_symlink_file)
 
 def create_images_list(args):
@@ -59,10 +58,10 @@ def create_images_list(args):
     Returns:
         number of images
     """
-    task_dir = os.path.join('data', args.id)
-    data_symlink_file = os.path.join(task_dir, 'images')
-    images_list_file = os.path.join(task_dir, 'images_list.txt')
-    remaining_list_file = os.path.join(task_dir, 'remaining_list.txt')
+    task_dir = Paths.task_dir(args.id)
+    data_symlink_file = Paths.images_dir(args.id)
+    images_list_file = Paths.images_list(args.id)
+    remaining_list_file = Paths.remaining_list(args.id)
 
     # create images list
     os.system("ls {0} > {1}".format(data_symlink_file, images_list_file))
@@ -82,8 +81,8 @@ def check_id_exists(args):
     Returns:
         True if id already exists
     """
-    if os.path.exists(TASKS_JSON):
-        with open(TASKS_JSON, 'r') as f:
+    if os.path.exists(Paths.tasks_json):
+        with open(Paths.tasks_json, 'r') as f:
             data = json.load(f)
         return args.id in data
         
@@ -102,8 +101,8 @@ def update_tasks_json(args, num_images):
     """
     # add new entry to tasks.json
     data = {}
-    if os.path.exists(TASKS_JSON):
-        with open(TASKS_JSON, 'r') as f:
+    if os.path.exists(Paths.tasks_json):
+        with open(Paths.tasks_json, 'r') as f:
             data = json.load(f)
 
     # add new entry to tasks.json
@@ -117,7 +116,7 @@ def update_tasks_json(args, num_images):
     data[args.id] = entry
 
     # save to tasks.json
-    with open(TASKS_JSON, 'w') as f:
+    with open(Paths.tasks_json, 'w') as f:
         json.dump(data, f, sort_keys=True, indent=4, separators=(',', ': '))
 
 def main():

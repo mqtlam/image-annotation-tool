@@ -8,6 +8,8 @@ import argparse
 import json
 import lmdb
 
+from paths import Paths
+
 def get_classes(args):
     """Get list of classes.
 
@@ -17,8 +19,7 @@ def get_classes(args):
     Returns:
         list of classes
     """
-    tasks_json = os.path.join('data', 'tasks.json')
-    with open(tasks_json, 'r') as f:
+    with open(Paths.tasks_json, 'r') as f:
         data = json.load(f)
     return data[args.task_id]['classes']
 
@@ -38,8 +39,7 @@ def main():
     total_counter = 0
 
     # read from lmdb
-    db_path = os.path.join('data', args.task_id, 'annotations')
-    with lmdb.open(db_path, map_size=pow(2, 40)) as env:
+    with lmdb.open(Paths.annotations_db(args.task_id), map_size=pow(2, 40)) as env:
         with env.begin(write=False) as txn:
             cursor = txn.cursor()
             for key, value in cursor:
