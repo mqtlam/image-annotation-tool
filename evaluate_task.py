@@ -26,16 +26,13 @@ def get_classes(args):
 def main():
     parser = argparse.ArgumentParser(description='Evaluate task.')
     parser.add_argument('task_id', type=str, help='task id')
-    parser.add_argument('--correct_class', type=int, default=0, help='correct class index')
-    parser.add_argument('--plausible_class', type=int, default=1, help='plausible class index')
-    parser.add_argument('--incorrect_class', type=int, default=2, help='incorrect class index')
     args = parser.parse_args()
 
     # set up data and counters
     classes = get_classes(args)
     class_counter = {}
-    for i in range(len(classes)):
-       class_counter[i] = 0
+    for class_index, _ in enumerate(classes):
+       class_counter[class_index] = 0
     total_counter = 0
 
     # read from lmdb
@@ -50,9 +47,8 @@ def main():
                 total_counter += 1
 
     # print results
-    print "Num correct: {0}".format(class_counter[args.correct_class])
-    print "Num plausible: {0}".format(class_counter[args.plausible_class])
-    print "Num incorrect: {0}".format(class_counter[args.incorrect_class])
+    for class_index, class_label in enumerate(classes):
+        print "Num {0}: {1}".format(class_label, class_counter[class_index])
     print "Total: {0}".format(total_counter)
 
 main()

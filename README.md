@@ -27,4 +27,4 @@ After a task is finished, evaluation can be run with the following script:
 python evaluate_task.py unique_task_id
 ```
 
-The default arguments assume the classes are "Correct", "Plausible" and "Incorrect". The script will print out the counts for these classes as well as the total.
+The script will print out the counts for these classes as well as the total.
