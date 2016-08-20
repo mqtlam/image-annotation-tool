@@ -1,6 +1,14 @@
 # class-annotation-tool
 Annotation tool for images with class labels
 
+## Requirements
+
+```bash
+pip install cherrypy
+pip install jinja2
+pip install lmdb
+```
+
 ## Instructions
 
 Launch server:
