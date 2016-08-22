@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block title %}{{ task["title"] }} | Review{% endblock %}
-{% block head %}
+{% block head -%}
 {{ super() }}
-{% endblock %}
-{% block help_modal_body %}
+{%- endblock %}
+{% block help_modal_body -%}
               <p>Use this page to review the annotations.</p>
-{% endblock %}
-{% block content %}
+{%- endblock %}
+{% block content -%}
       <div class="row">
         <div class="col-md-10">
           <div class="progress">
@@ -43,4 +43,4 @@
         </div>
       {% endfor %}
       </form>
-{% endblock %}
+{%- endblock %}

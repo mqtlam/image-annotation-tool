@@ -1,24 +1,20 @@
 {% extends "base.html" %}
 {% block title %}{{ task["title"] }}{% endblock %}
-{% block head %}
+{% block head -%}
 {{ super() }}
-{% endblock %}
-{% block help_modal_body %}
+{%- endblock %}
+{% block help_modal_body -%}
             <h4>Hot Keys</h4>
             <ul>
-              <li>Keys 
-              {% for key in range(num_hot_keys) %}
-              {{ '"{0}", '.format(key+1) if loop.index < num_hot_keys else '"{0}"'.format(key+1) }}
-              {% endfor %}
-              select
-              {% for class_name in task['classes'] %}
-              {{ "{0}, ".format(class_name) if loop.index < num_hot_keys else class_name }}
-              {% endfor %}
-              (respectively).</li>
+              <li>Keys {% for key in range(num_hot_keys) %}
+              {{- '"{0}", '.format(key+1) if loop.index < num_hot_keys else '"{0}"'.format(key+1) -}}
+              {% endfor %} select {% for class_name in task['classes'] %}
+              {{- "{0}, ".format(class_name) if loop.index < num_hot_keys else class_name -}}
+              {% endfor %} (respectively).</li>
               <li>"Enter" key presses Next button.</li>
             </ul>
-{% endblock %}
-{% block content %}
+{%- endblock %}
+{% block content -%}
       <form action="/write" method="get">
         <input type="hidden" name="task_id" value="{{ task['id'] }}" />
         <input type="hidden" name="image_id" value="{{ image_name }}" />
@@ -74,4 +70,4 @@
           </div>
         </div>
       </div>
-{% endblock %}
+{%- endblock %}

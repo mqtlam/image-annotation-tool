@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block title %}All Tasks{% endblock %}
-{% block head %}
+{% block head -%}
 {{ super() }}
-{% endblock %}
-{% block help_modal_body %}    
+{%- endblock %}
+{% block help_modal_body -%}
             <p>Select a task from the list below to get started.</p>
-{% endblock %}
-{% block content %}
+{%- endblock %}
+{% block content -%}
       <h2>Tasks</h2>
 
       <p>Select a task below to start annotating!</p>
@@ -15,11 +15,11 @@
         {% if not tasks_data %}
         <div class="alert alert-success" role="alert">There are no annotation tasks currently available.</div>
         {% endif %}
-        {% for task_id, task in tasks_data.iteritems() %}
+        {% for task_id, task in tasks_data.iteritems() -%}
         <a href="/task/{{ task['id'] }}" class="list-group-item {{ 'list-group-item-success' if task['num_completed'] >= task['num_total_images'] else '' }}">
           <span class="badge">{{ task['num_completed']|commas }}/{{ task['num_total_images']|commas }}</span>
           {{ task['title'] }} ({{ task['id'] }})
         </a>
         {% endfor %}
       </div>
-{% endblock %}
+{%- endblock %}
