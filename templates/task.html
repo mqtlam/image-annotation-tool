@@ -1,53 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>{{ task["title"] }} | Annotation Tool</title>
-
-    <!-- Bootstrap -->
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="/static/css/style.css" rel="stylesheet" />
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/">Annotation Tool</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="/">Home</a></li>
-            <li><a href="#help-modal" data-toggle="modal" data-target="#help-modal">Help</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
-
-    <!-- Modal -->
-    <div class="modal fade" id="help-modal" tabindex="-1" role="dialog" aria-labelledby="helpmodal">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="helpmodal">Help</h4>
-          </div>
-          <div class="modal-body">
+{% extends "base.html" %}
+{% block title %}{{ task["title"] }}{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block help_modal_body %}
             <h4>Hot Keys</h4>
             <ul>
               <li>Keys 
@@ -61,15 +17,8 @@
               (respectively).</li>
               <li>"Enter" key presses Next button.</li>
             </ul>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="container" role="main">
+{% endblock %}
+{% block content %}
       <form action="/write" method="get">
         <input type="hidden" name="task_id" value="{{ task['id'] }}" />
         <input type="hidden" name="image_id" value="{{ image_name }}" />
@@ -125,34 +74,4 @@
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="/static/js/bootstrap.min.js"></script>
-    <script src="/static/js/script.js"></script>
-    <script type="text/javascript">
-    <!--
-    $("#next-button").prop("disabled", true);
-    $(window).keypress(function(event) {
-      console.log("Pressed keyCode=" + event.keyCode)
-      if (event.keyCode == 13) { // enter
-        $("#next-button").click()
-      }
-      {% for class_id in range(1, num_hot_keys+1) %}
-      else if (event.keyCode == {{ 49 + class_id - 1 if class_id != 10 else 48 }}) {
-        $("#annotation_radio_{{ class_id }}").prop("checked", true);
-        $("#next-button").prop("disabled", false);
-      }
-      {% endfor %}
-    });
-    {% for class_id in range(1, num_hot_keys+1) %}
-    $("#annotation_radio_{{ class_id }}").click(function() {
-      $("#next-button").prop("disabled", false);
-    });
-    {% endfor %}
-    //-->
-    </script>
-  </body>
-</html>
+{% endblock %}
