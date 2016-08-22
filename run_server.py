@@ -88,6 +88,41 @@ class Server(object):
 
         raise cherrypy.HTTPRedirect("/task/{0}".format(task_id))
 
+    @cherrypy.expose
+    def review(self, task_id=None):
+        if task_id is None:
+            raise cherrypy.HTTPRedirect("/")
+
+        # checks
+        if not os.path.exists(TASKS_JSON):
+            return "Invalid state: {0} does not exist!".format(TASKS_JSON)
+        with open(TASKS_JSON, 'r') as f:
+            tasks_data = json.load(f)
+
+        if task_id not in tasks_data:
+            return "Invalid state: cannot find task_id {0}!".format(task_id)
+
+        # get image from remaining list file
+        images_list_file = os.path.join('data', task_id, 'images_list.txt')
+        with open(images_list_file, 'r') as f:
+            images_list = [l.strip() for l in f]
+
+        # get annotations so far
+        annotations = {}
+        db_path = os.path.join('data', task_id, 'annotations')
+        with lmdb.open(db_path, map_size=pow(2, 40)) as lenv:
+            with lenv.begin(write=False) as txn:
+                cursor = txn.cursor()
+                for key, value in cursor:
+                    annotations[key] = value
+
+        # variables to pass into template
+        task = tasks_data[task_id]
+        progress_percent = 100.*task['num_completed'] / task['num_total_images']
+
+        tmpl = env.get_template('review.html')
+        return tmpl.render(task=task, progress_percent=progress_percent, images_list=images_list, annotations=annotations)
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run annotation server.')
     parser.add_argument('--host', type=str, default='0.0.0.0', help='socket host')
