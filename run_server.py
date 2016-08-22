@@ -19,8 +19,11 @@ env.filters[commas.__name__] = commas
 class Server(object):
     @cherrypy.expose
     def index(self):
+        if not os.path.exists(STATE_DATA_DIR):
+            os.makedirs(STATE_DATA_DIR)
         if not os.path.exists(TASKS_JSON):
-            return "Invalid state: {0} does not exist!".format(TASKS_JSON)
+            with open(TASKS_JSON, 'w') as f:
+                f.write('{}')
         with open(TASKS_JSON, 'r') as f:
             tasks_data = json.load(f)
 
