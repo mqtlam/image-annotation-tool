@@ -3,5 +3,5 @@ body {
 }
 
 #preview_image {
-  /*width: 320px;*/
+  max-width: 640px;
 }
