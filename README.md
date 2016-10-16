@@ -1,4 +1,4 @@
-# class-annotation-tool
+# image-annotation-tool
 Annotation tool for images with class labels
 
 ## Requirements
